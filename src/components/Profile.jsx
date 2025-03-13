@@ -3,7 +3,7 @@ import { FaUser, FaShoppingBag, FaMapMarkerAlt, FaCreditCard, FaCog, FaHeart, Fa
 import { useReviews } from '../context/ReviewContext';
 import { useWishlist } from '../context/WishlistContext';
 import { useCart } from '../context/CartContext';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import ProductReview from './ProductReview';
 
 export default function Profile() {
@@ -11,6 +11,7 @@ export default function Profile() {
   const { reviews, isLoading: isLoadingReviews, error: reviewError, loadReviews } = useReviews();
   const { wishlistItems, removeFromWishlist } = useWishlist();
   const { addItem } = useCart();
+  const location = useLocation();
 
   // Mock data for demonstration
   const orders = [
@@ -33,6 +34,15 @@ export default function Profile() {
     { id: 1, type: 'Personal', name: 'John Doe', address: '123 Main Street, Apartment 4B', city: 'Bangalore', state: 'Karnataka', pincode: '560001', gstin: '', isDefault: true },
     { id: 2, type: 'Business', name: 'Acme Corp', address: '456 Business Park, Building C', city: 'Bangalore', state: 'Karnataka', pincode: '560008', gstin: 'GSTIN29ABCDE1234F1Z5', isDefault: false }
   ];
+
+  // Set active tab based on URL query parameter
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const tabParam = searchParams.get('tab');
+    if (tabParam && ['orders', 'wishlist', 'addresses', 'payment', 'billing', 'reviews', 'settings'].includes(tabParam)) {
+      setActiveTab(tabParam);
+    }
+  }, [location.search]);
 
   // Fetch product reviews when the reviews tab is activated
   useEffect(() => {
@@ -82,7 +92,7 @@ export default function Profile() {
               Add to Cart
             </button>
             <Link 
-              to={`/shop?product=${item.id}`}
+              to={`/product/${item.id}`}
               className="btn btn-outline-primary py-2 px-3"
             >
               View

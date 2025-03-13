@@ -6,6 +6,7 @@ import ProductGrid from './components/ProductGrid';
 import Cart from './components/Cart';
 import Footer from './components/Footer';
 import Profile from './components/Profile';
+import ProductDetail from './components/ProductDetail';
 import { ReviewProvider } from './context/ReviewContext';
 import { WishlistProvider } from './context/WishlistContext';
 
@@ -137,7 +138,7 @@ function App() {
                     </h2>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
-                      <div>
+                      <div className='bg-gray-100 rounded-lg p-8'>
                         <h3 className="text-2xl font-semibold mb-4 text-gray-800">Our Story</h3>
                         <p className="text-lg text-gray-700 mb-4">
                           Founded in 2018, ShopEasy began with a simple mission: to make online shopping truly easy and enjoyable for everyone. What started as a small startup with just 5 team members has now grown into a trusted e-commerce platform serving thousands of customers nationwide.
@@ -367,6 +368,7 @@ function App() {
                   </div>
                 } />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/product/:productId" element={<ProductDetail />} />
               </Routes>
             </main>
             <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />

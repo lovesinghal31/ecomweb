@@ -1,10 +1,12 @@
 import { useCart } from '../context/CartContext';
-import { FaShoppingCart, FaBars, FaUser, FaSearch, FaTimes } from 'react-icons/fa';
+import { useWishlist } from '../context/WishlistContext';
+import { FaShoppingCart, FaBars, FaUser, FaSearch, FaTimes, FaHeart } from 'react-icons/fa';
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 export default function Header({ onCartClick }) {
   const { totalItems } = useCart();
+  const { wishlistItems } = useWishlist();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -182,6 +184,22 @@ export default function Header({ onCartClick }) {
                 <FaUser size={18} />
               </Link>
 
+              {/* Wishlist Icon */}
+              <Link 
+                to="/profile?tab=wishlist"
+                className={`p-2 rounded-full ${
+                  isHomePage && !isScrolled ? 'text-white hover:bg-white/10' : 'text-gray-800 hover:bg-gray-100'
+                } transition-colors relative ${location.pathname === '/profile' && location.search.includes('tab=wishlist') ? 'text-primary' : ''}`}
+                aria-label="Wishlist"
+              >
+                <FaHeart size={18} />
+                {wishlistItems.length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {wishlistItems.length}
+                  </span>
+                )}
+              </Link>
+
               {/* Cart Icon */}
               <button 
                 onClick={onCartClick}
@@ -316,13 +334,15 @@ export default function Header({ onCartClick }) {
                 { path: '/categories', label: 'Categories', icon: '📋' },
                 { path: '/about', label: 'About', icon: 'ℹ️' },
                 { path: '/contact', label: 'Contact', icon: '📞' },
-                { path: '/profile', label: 'My Profile', icon: '👤' }
+                { path: '/profile', label: 'My Profile', icon: '👤' },
+                { path: '/profile?tab=wishlist', label: 'My Wishlist', icon: '❤️' }
               ].map((item) => (
                 <Link
                   key={item.path}
                   to={item.path}
                   className={`flex items-center px-4 py-3 text-base font-medium rounded-lg transition-colors ${
-                    isActive(item.path)
+                    (item.path === '/profile?tab=wishlist' && location.pathname === '/profile' && location.search.includes('tab=wishlist')) ||
+                    (item.path === location.pathname && !item.path.includes('?'))
                       ? 'bg-primary/10 text-primary'
                       : 'text-gray-800 hover:bg-gray-100'
                   }`}
@@ -330,6 +350,11 @@ export default function Header({ onCartClick }) {
                 >
                   <span className="mr-3">{item.icon}</span>
                   {item.label}
+                  {item.path === '/profile?tab=wishlist' && wishlistItems.length > 0 && (
+                    <span className="ml-auto bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                      {wishlistItems.length}
+                    </span>
+                  )}
                 </Link>
               ))}
             </div>
