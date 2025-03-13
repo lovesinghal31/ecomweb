@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FaUser, FaShoppingBag, FaMapMarkerAlt, FaCreditCard, FaCog, FaHeart, FaFileInvoiceDollar, FaStar } from 'react-icons/fa';
+import { FaUser, FaShoppingBag, FaMapMarkerAlt, FaCreditCard, FaCog, FaHeart, FaFileInvoiceDollar, FaStar, FaPaypal, FaCcVisa, FaCcMastercard, FaCcAmex, FaGooglePay } from 'react-icons/fa';
 import { useReviews } from '../context/ReviewContext';
 import ProductReview from './ProductReview';
 
@@ -20,8 +20,8 @@ export default function Profile() {
   ];
 
   const paymentMethods = [
-    { id: 1, type: 'Credit Card', last4: '4242', expiry: '05/25', name: 'John Doe', isDefault: true },
-    { id: 2, type: 'UPI', id: 'johndoe@upi', name: 'John Doe', isDefault: false }
+    { id: 1, type: 'Credit Card', last4: '4242', expiry: '05/25', name: 'John Doe', isDefault: true, brand: 'visa' },
+    { id: 2, type: 'UPI', id: 'johndoe@upi', name: 'John Doe', isDefault: false, brand: 'googlepay' }
   ];
 
   const billingMethods = [
@@ -30,8 +30,8 @@ export default function Profile() {
   ];
 
   const wishlist = [
-    { id: 1, name: 'Wireless Bluetooth Headphones', price: 2499, image: '/path/to/image1.jpg' },
-    { id: 2, name: 'Smart Fitness Tracker', price: 1799, image: '/path/to/image2.jpg' }
+    { id: 1, name: 'Wireless Bluetooth Headphones', price: 2499, image: '/src/assets/bluetooth-headphone.webp' },
+    { id: 2, name: 'Smart Fitness Tracker', price: 1799, image: '/src/assets/smart-fitness-tracker.webp' }
   ];
 
   // Fetch product reviews when the reviews tab is activated
@@ -54,27 +54,15 @@ export default function Profile() {
     return (
       <div key={item.id} className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
         <div className="h-48 bg-gray-200 relative">
-          {item.image && item.image.startsWith('/path/to/') ? (
-            // Fallback for placeholder images
-            <div className="w-full h-full flex items-center justify-center text-gray-400">
-              <div className="flex flex-col items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                <span>{item.name}</span>
-              </div>
-            </div>
-          ) : (
-            <img 
-              src={item.image || `https://source.unsplash.com/300x300/?${encodeURIComponent(item.name)}`} 
-              alt={item.name}
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = `https://source.unsplash.com/300x300/?${encodeURIComponent(item.name)}`;
-              }}
-            />
-          )}
+          <img 
+            src={item.image} 
+            alt={item.name}
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = `https://source.unsplash.com/300x300/?${encodeURIComponent(item.name)}`;
+            }}
+          />
           <button className="absolute top-2 right-2 bg-white/80 hover:bg-white p-1.5 rounded-full shadow-sm hover:shadow-md transition-all">
             <FaHeart className="text-red-500" />
           </button>
@@ -99,10 +87,10 @@ export default function Profile() {
         My Account
       </h2>
 
-      <div className="flex flex-col md:flex-row gap-8">
+      <div className="flex flex-col lg:flex-row gap-8">
         {/* Sidebar Navigation */}
-        <div className="w-full md:w-64 flex-shrink-0">
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="w-full lg:w-64 flex-shrink-0">
+          <div className="bg-white rounded-lg shadow-md overflow-hidden sticky top-24">
             <div className="p-6 border-b">
               <div className="flex items-center">
                 <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
@@ -256,31 +244,56 @@ export default function Profile() {
                 {addresses.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {addresses.map((address) => (
-                      <div key={address.id} className="border rounded-lg p-4 relative">
+                      <div key={address.id} className={`border rounded-lg p-4 relative transition-all hover:shadow-md ${address.isDefault ? 'border-primary border-2' : ''}`}>
                         {address.isDefault && (
                           <span className="absolute top-2 right-2 bg-primary text-white text-xs px-2 py-1 rounded">Default</span>
                         )}
-                        <div className="flex justify-between mb-2">
-                          <h4 className="font-medium">{address.type}</h4>
+                        <div className="flex justify-between mb-4">
+                          <div className="flex items-center">
+                            <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mr-3">
+                              <FaMapMarkerAlt className="text-primary" />
+                            </div>
+                            <h4 className="font-medium text-lg">{address.type}</h4>
+                          </div>
                           <div className="flex space-x-2">
-                            <button className="text-gray-500 hover:text-primary">Edit</button>
-                            <button className="text-gray-500 hover:text-red-500">Delete</button>
+                            <button className="text-gray-500 hover:text-primary transition-colors">
+                              <span className="sr-only">Edit</span>
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                              </svg>
+                            </button>
+                            <button className="text-gray-500 hover:text-red-500 transition-colors">
+                              <span className="sr-only">Delete</span>
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                              </svg>
+                            </button>
                           </div>
                         </div>
-                        <p className="text-gray-700">{address.name}</p>
-                        <p className="text-gray-600">{address.address}</p>
-                        <p className="text-gray-600">{address.city}, {address.state} {address.pincode}</p>
-                        <p className="text-gray-600 mt-2">Phone: {address.phone}</p>
+                        <div className="bg-gray-50 p-3 rounded-md">
+                          <p className="text-gray-700 font-medium">{address.name}</p>
+                          <p className="text-gray-600 text-sm">{address.address}</p>
+                          <p className="text-gray-600 text-sm">{address.city}, {address.state} {address.pincode}</p>
+                          <p className="text-gray-600 mt-2 text-sm">Phone: {address.phone}</p>
+                        </div>
                         {!address.isDefault && (
-                          <button className="mt-3 text-sm text-primary hover:text-primary-dark">Set as Default</button>
+                          <button className="mt-3 text-sm text-primary hover:text-primary-dark flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                            Set as Default
+                          </button>
                         )}
                       </div>
                     ))}
                   </div>
                 ) : (
                   <div className="text-center py-8">
-                    <p className="text-gray-500">You haven't added any addresses yet.</p>
-                    <button className="mt-4 btn btn-primary">Add Address</button>
+                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <FaMapMarkerAlt className="text-gray-400 text-2xl" />
+                    </div>
+                    <p className="text-gray-500 mb-4">You haven't added any addresses yet.</p>
+                    <button className="btn btn-primary">Add Address</button>
                   </div>
                 )}
               </div>
@@ -297,35 +310,72 @@ export default function Profile() {
                 {paymentMethods.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {paymentMethods.map((method) => (
-                      <div key={method.id} className="border rounded-lg p-4 relative">
+                      <div key={method.id} className={`border rounded-lg p-4 relative transition-all hover:shadow-md ${method.isDefault ? 'border-primary border-2' : ''}`}>
                         {method.isDefault && (
                           <span className="absolute top-2 right-2 bg-primary text-white text-xs px-2 py-1 rounded">Default</span>
                         )}
-                        <div className="flex justify-between mb-2">
-                          <h4 className="font-medium">{method.type}</h4>
+                        <div className="flex justify-between mb-4">
+                          <div className="flex items-center">
+                            {method.type === 'Credit Card' && (
+                              <div className="w-12 h-8 mr-3 flex items-center justify-center">
+                                {method.brand === 'visa' && <FaCcVisa className="text-blue-700 text-3xl" />}
+                                {method.brand === 'mastercard' && <FaCcMastercard className="text-red-600 text-3xl" />}
+                                {method.brand === 'amex' && <FaCcAmex className="text-blue-500 text-3xl" />}
+                                {!['visa', 'mastercard', 'amex'].includes(method.brand) && <FaCreditCard className="text-gray-600 text-3xl" />}
+                              </div>
+                            )}
+                            {method.type === 'UPI' && (
+                              <div className="w-12 h-8 mr-3 flex items-center justify-center">
+                                {method.brand === 'googlepay' && <FaGooglePay className="text-gray-700 text-3xl" />}
+                                {method.brand === 'paypal' && <FaPaypal className="text-blue-600 text-3xl" />}
+                                {!['googlepay', 'paypal'].includes(method.brand) && <FaCreditCard className="text-gray-600 text-3xl" />}
+                              </div>
+                            )}
+                            <h4 className="font-medium text-lg">{method.type}</h4>
+                          </div>
                           <div className="flex space-x-2">
-                            <button className="text-gray-500 hover:text-red-500">Delete</button>
+                            <button className="text-gray-500 hover:text-red-500 transition-colors">
+                              <span className="sr-only">Delete</span>
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                              </svg>
+                            </button>
                           </div>
                         </div>
-                        {method.type === 'Credit Card' ? (
-                          <>
-                            <p className="text-gray-600">•••• •••• •••• {method.last4}</p>
-                            <p className="text-gray-600">Expires: {method.expiry}</p>
-                          </>
-                        ) : (
-                          <p className="text-gray-600">{method.id}</p>
-                        )}
-                        <p className="text-gray-600 mt-1">{method.name}</p>
+                        <div className="bg-gray-50 p-3 rounded-md">
+                          {method.type === 'Credit Card' ? (
+                            <>
+                              <div className="flex items-center mb-2">
+                                <div className="w-8 h-5 bg-gray-200 rounded mr-2"></div>
+                                <div className="w-8 h-5 bg-gray-200 rounded mr-2"></div>
+                                <div className="w-8 h-5 bg-gray-200 rounded mr-2"></div>
+                                <div className="w-8 h-5 bg-gray-300 rounded flex items-center justify-center text-xs font-mono">{method.last4}</div>
+                              </div>
+                              <p className="text-gray-600 text-sm">Expires: {method.expiry}</p>
+                            </>
+                          ) : (
+                            <p className="text-gray-600 font-mono">{method.id}</p>
+                          )}
+                          <p className="text-gray-600 mt-2 text-sm">{method.name}</p>
+                        </div>
                         {!method.isDefault && (
-                          <button className="mt-3 text-sm text-primary hover:text-primary-dark">Set as Default</button>
+                          <button className="mt-3 text-sm text-primary hover:text-primary-dark flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                            Set as Default
+                          </button>
                         )}
                       </div>
                     ))}
                   </div>
                 ) : (
                   <div className="text-center py-8">
-                    <p className="text-gray-500">You haven't added any payment methods yet.</p>
-                    <button className="mt-4 btn btn-primary">Add Payment Method</button>
+                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <FaCreditCard className="text-gray-400 text-2xl" />
+                    </div>
+                    <p className="text-gray-500 mb-4">You haven't added any payment methods yet.</p>
+                    <button className="btn btn-primary">Add Payment Method</button>
                   </div>
                 )}
               </div>
@@ -342,33 +392,58 @@ export default function Profile() {
                 {billingMethods.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {billingMethods.map((method) => (
-                      <div key={method.id} className="border rounded-lg p-4 relative">
+                      <div key={method.id} className={`border rounded-lg p-4 relative transition-all hover:shadow-md ${method.isDefault ? 'border-primary border-2' : ''}`}>
                         {method.isDefault && (
                           <span className="absolute top-2 right-2 bg-primary text-white text-xs px-2 py-1 rounded">Default</span>
                         )}
-                        <div className="flex justify-between mb-2">
-                          <h4 className="font-medium">{method.type}</h4>
+                        <div className="flex justify-between mb-4">
+                          <div className="flex items-center">
+                            <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mr-3">
+                              <FaFileInvoiceDollar className="text-primary" />
+                            </div>
+                            <h4 className="font-medium text-lg">{method.type}</h4>
+                          </div>
                           <div className="flex space-x-2">
-                            <button className="text-gray-500 hover:text-primary">Edit</button>
-                            <button className="text-gray-500 hover:text-red-500">Delete</button>
+                            <button className="text-gray-500 hover:text-primary transition-colors">
+                              <span className="sr-only">Edit</span>
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                              </svg>
+                            </button>
+                            <button className="text-gray-500 hover:text-red-500 transition-colors">
+                              <span className="sr-only">Delete</span>
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                              </svg>
+                            </button>
                           </div>
                         </div>
-                        <p className="text-gray-700">{method.name}</p>
-                        <p className="text-gray-600">{method.address}</p>
-                        <p className="text-gray-600">{method.city}, {method.state} {method.pincode}</p>
-                        {method.gstin && (
-                          <p className="text-gray-600 mt-2">GSTIN: {method.gstin}</p>
-                        )}
+                        <div className="bg-gray-50 p-3 rounded-md">
+                          <p className="text-gray-700 font-medium">{method.name}</p>
+                          <p className="text-gray-600 text-sm">{method.address}</p>
+                          <p className="text-gray-600 text-sm">{method.city}, {method.state} {method.pincode}</p>
+                          {method.gstin && (
+                            <p className="text-gray-600 mt-2 text-sm font-mono">GSTIN: {method.gstin}</p>
+                          )}
+                        </div>
                         {!method.isDefault && (
-                          <button className="mt-3 text-sm text-primary hover:text-primary-dark">Set as Default</button>
+                          <button className="mt-3 text-sm text-primary hover:text-primary-dark flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                            Set as Default
+                          </button>
                         )}
                       </div>
                     ))}
                   </div>
                 ) : (
                   <div className="text-center py-8">
-                    <p className="text-gray-500">You haven't added any billing information yet.</p>
-                    <button className="mt-4 btn btn-primary">Add Billing Information</button>
+                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <FaFileInvoiceDollar className="text-gray-400 text-2xl" />
+                    </div>
+                    <p className="text-gray-500 mb-4">You haven't added any billing information yet.</p>
+                    <button className="btn btn-primary">Add Billing Information</button>
                   </div>
                 )}
               </div>
@@ -496,6 +571,7 @@ export default function Profile() {
                           type="password"
                           id="currentPassword"
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                          placeholder="Enter your current password"
                         />
                       </div>
                       <div>
@@ -504,6 +580,7 @@ export default function Profile() {
                           type="password"
                           id="newPassword"
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                          placeholder="Enter your new password"
                         />
                       </div>
                       <div>
@@ -512,6 +589,7 @@ export default function Profile() {
                           type="password"
                           id="confirmPassword"
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                          placeholder="Confirm your new password"
                         />
                       </div>
                       <button type="submit" className="btn btn-primary">Update Password</button>

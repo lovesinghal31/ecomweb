@@ -25,6 +25,10 @@ export default function ProductCard({ product }) {
           src={image} 
           alt={title}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = `https://source.unsplash.com/300x300/?${encodeURIComponent(title)}`;
+          }}
         />
         {review && (
           <div className="absolute top-2 right-2 bg-white/90 rounded-full p-1 shadow-md">
