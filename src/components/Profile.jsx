@@ -82,7 +82,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-16">
       <h2 className="text-3xl font-bold text-gray-900 mb-8 pb-2 border-b-2 border-primary w-fit">
         My Account
       </h2>
@@ -245,15 +245,15 @@ export default function Profile() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {addresses.map((address) => (
                       <div key={address.id} className={`border rounded-lg p-4 relative transition-all hover:shadow-md ${address.isDefault ? 'border-primary border-2' : ''}`}>
-                        {address.isDefault && (
-                          <span className="absolute top-2 right-2 bg-primary text-white text-xs px-2 py-1 rounded">Default</span>
-                        )}
                         <div className="flex justify-between mb-4">
                           <div className="flex items-center">
                             <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mr-3">
                               <FaMapMarkerAlt className="text-primary" />
                             </div>
                             <h4 className="font-medium text-lg">{address.type}</h4>
+                            {address.isDefault && (
+                              <span className="ml-2 bg-primary text-white text-xs px-2 py-1 rounded">Default</span>
+                            )}
                           </div>
                           <div className="flex space-x-2">
                             <button className="text-gray-500 hover:text-primary transition-colors">
@@ -311,9 +311,6 @@ export default function Profile() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {paymentMethods.map((method) => (
                       <div key={method.id} className={`border rounded-lg p-4 relative transition-all hover:shadow-md ${method.isDefault ? 'border-primary border-2' : ''}`}>
-                        {method.isDefault && (
-                          <span className="absolute top-2 right-2 bg-primary text-white text-xs px-2 py-1 rounded">Default</span>
-                        )}
                         <div className="flex justify-between mb-4">
                           <div className="flex items-center">
                             {method.type === 'Credit Card' && (
@@ -332,6 +329,9 @@ export default function Profile() {
                               </div>
                             )}
                             <h4 className="font-medium text-lg">{method.type}</h4>
+                            {method.isDefault && (
+                              <span className="ml-2 bg-primary text-white text-xs px-2 py-1 rounded">Default</span>
+                            )}
                           </div>
                           <div className="flex space-x-2">
                             <button className="text-gray-500 hover:text-red-500 transition-colors">
@@ -393,15 +393,15 @@ export default function Profile() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {billingMethods.map((method) => (
                       <div key={method.id} className={`border rounded-lg p-4 relative transition-all hover:shadow-md ${method.isDefault ? 'border-primary border-2' : ''}`}>
-                        {method.isDefault && (
-                          <span className="absolute top-2 right-2 bg-primary text-white text-xs px-2 py-1 rounded">Default</span>
-                        )}
                         <div className="flex justify-between mb-4">
                           <div className="flex items-center">
                             <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mr-3">
                               <FaFileInvoiceDollar className="text-primary" />
                             </div>
                             <h4 className="font-medium text-lg">{method.type}</h4>
+                            {method.isDefault && (
+                              <span className="ml-2 bg-primary text-white text-xs px-2 py-1 rounded">Default</span>
+                            )}
                           </div>
                           <div className="flex space-x-2">
                             <button className="text-gray-500 hover:text-primary transition-colors">

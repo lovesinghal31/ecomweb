@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import ProductGrid from './components/ProductGrid';
@@ -8,12 +8,37 @@ import Footer from './components/Footer';
 import Profile from './components/Profile';
 import { ReviewProvider } from './context/ReviewContext';
 
+// ScrollToTop component to handle scrolling to top on page navigation
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
 function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
+
+  // Prevent body scrolling when cart is open
+  useEffect(() => {
+    if (isCartOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isCartOpen]);
 
   return (
     <ReviewProvider>
       <Router>
+        <ScrollToTop />
         <div className="flex flex-col min-h-screen">
           <Header onCartClick={() => setIsCartOpen(true)} />
           <main className="flex-grow">
@@ -30,7 +55,7 @@ function App() {
                 </>
               } />
               <Route path="/shop" element={
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-16">
                   <h2 className="text-3xl font-bold text-gray-900 mb-8 pb-2 border-b-2 border-primary w-fit">
                     All Products
                   </h2>
@@ -38,7 +63,7 @@ function App() {
                 </div>
               } />
               <Route path="/categories" element={
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-16">
                   <h2 className="text-3xl font-bold text-gray-900 mb-8 pb-2 border-b-2 border-primary w-fit">
                     Categories
                   </h2>
@@ -104,7 +129,7 @@ function App() {
                 </div>
               } />
               <Route path="/about" element={
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-16">
                   <h2 className="text-3xl font-bold text-gray-900 mb-8 pb-2 border-b-2 border-primary w-fit">
                     About Us
                   </h2>
@@ -183,7 +208,7 @@ function App() {
                 </div>
               } />
               <Route path="/contact" element={
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-16">
                   <h2 className="text-3xl font-bold text-gray-900 mb-8 pb-2 border-b-2 border-primary w-fit">
                     Contact Us
                   </h2>
@@ -304,7 +329,7 @@ function App() {
                           <textarea
                             id="message"
                             rows="5"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
                             placeholder="Your message"
                           ></textarea>
                         </div>
