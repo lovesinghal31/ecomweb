@@ -1,11 +1,16 @@
 import { useState, useEffect } from 'react';
 import { FaUser, FaShoppingBag, FaMapMarkerAlt, FaCreditCard, FaCog, FaHeart, FaFileInvoiceDollar, FaStar, FaPaypal, FaCcVisa, FaCcMastercard, FaCcAmex, FaGooglePay } from 'react-icons/fa';
 import { useReviews } from '../context/ReviewContext';
+import { useWishlist } from '../context/WishlistContext';
+import { useCart } from '../context/CartContext';
+import { Link } from 'react-router-dom';
 import ProductReview from './ProductReview';
 
 export default function Profile() {
   const [activeTab, setActiveTab] = useState('orders');
   const { reviews, isLoading: isLoadingReviews, error: reviewError, loadReviews } = useReviews();
+  const { wishlistItems, removeFromWishlist } = useWishlist();
+  const { addItem } = useCart();
 
   // Mock data for demonstration
   const orders = [
@@ -27,11 +32,6 @@ export default function Profile() {
   const billingMethods = [
     { id: 1, type: 'Personal', name: 'John Doe', address: '123 Main Street, Apartment 4B', city: 'Bangalore', state: 'Karnataka', pincode: '560001', gstin: '', isDefault: true },
     { id: 2, type: 'Business', name: 'Acme Corp', address: '456 Business Park, Building C', city: 'Bangalore', state: 'Karnataka', pincode: '560008', gstin: 'GSTIN29ABCDE1234F1Z5', isDefault: false }
-  ];
-
-  const wishlist = [
-    { id: 1, name: 'Wireless Bluetooth Headphones', price: 2499, image: '/src/assets/bluetooth-headphone.webp' },
-    { id: 2, name: 'Smart Fitness Tracker', price: 1799, image: '/src/assets/smart-fitness-tracker.webp' }
   ];
 
   // Fetch product reviews when the reviews tab is activated
@@ -56,25 +56,37 @@ export default function Profile() {
         <div className="h-48 bg-gray-200 relative">
           <img 
             src={item.image} 
-            alt={item.name}
+            alt={item.title || item.name}
             className="w-full h-full object-cover"
             onError={(e) => {
               e.target.onerror = null;
-              e.target.src = `https://source.unsplash.com/300x300/?${encodeURIComponent(item.name)}`;
+              e.target.src = `https://source.unsplash.com/300x300/?${encodeURIComponent(item.title || item.name)}`;
             }}
           />
-          <button className="absolute top-2 right-2 bg-white/80 hover:bg-white p-1.5 rounded-full shadow-sm hover:shadow-md transition-all">
+          <button 
+            onClick={() => removeFromWishlist(item)}
+            className="absolute top-2 right-2 bg-red-50 hover:bg-red-100 p-1.5 rounded-full shadow-sm hover:shadow-md transition-all"
+            aria-label="Remove from wishlist"
+          >
             <FaHeart className="text-red-500" />
           </button>
         </div>
         <div className="p-4">
-          <h4 className="font-medium text-gray-900 mb-1">{item.name}</h4>
+          <h4 className="font-medium text-gray-900 mb-1">{item.title || item.name}</h4>
           <p className="text-primary font-bold mb-3">₹{item.price.toFixed(2)}</p>
           <div className="flex space-x-2">
-            <button className="btn btn-primary flex-grow py-2">Add to Cart</button>
-            <button className="btn btn-outline-primary py-2 px-3">
-              View
+            <button 
+              onClick={() => addItem(item)}
+              className="btn btn-primary flex-grow py-2"
+            >
+              Add to Cart
             </button>
+            <Link 
+              to={`/shop?product=${item.id}`}
+              className="btn btn-outline-primary py-2 px-3"
+            >
+              View
+            </Link>
           </div>
         </div>
       </div>
@@ -496,14 +508,17 @@ export default function Profile() {
               <div>
                 <h3 className="text-xl font-semibold mb-6">My Wishlist</h3>
                 
-                {wishlist.length > 0 ? (
+                {wishlistItems.length > 0 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {wishlist.map(renderWishlistItem)}
+                    {wishlistItems.map(renderWishlistItem)}
                   </div>
                 ) : (
                   <div className="text-center py-8">
-                    <p className="text-gray-500">Your wishlist is empty.</p>
-                    <button className="mt-4 btn btn-primary">Explore Products</button>
+                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <FaHeart className="text-gray-400 text-2xl" />
+                    </div>
+                    <p className="text-gray-500 mb-4">Your wishlist is empty.</p>
+                    <Link to="/shop" className="btn btn-primary">Explore Products</Link>
                   </div>
                 )}
               </div>
