@@ -152,7 +152,7 @@ export default function ProductDetail() {
                 {[...Array(5)].map((_, i) => (
                   <FaStar 
                     key={i} 
-                    className={i < Math.floor(review.averageRating) ? "text-yellow-500" : "text-gray-300"} 
+                    className={i < Math.floor(review.averageRating) ? "text-primary" : "text-gray-300"} 
                   />
                 ))}
               </div>

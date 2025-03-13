@@ -221,8 +221,8 @@ export default function PriceTracker({ productId, productName, currentPrice }) {
       {
         label: 'Historical Price',
         data: [...filteredHistory.map(item => item.price), ...Array(predictions.length).fill(null)],
-        borderColor: 'rgba(52, 152, 219, 1)',
-        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+        borderColor: 'rgba(252, 163, 17, 1)',
+        backgroundColor: 'rgba(252, 163, 17, 0.1)',
         borderWidth: 2,
         pointRadius: 0,
         pointHoverRadius: 5,
@@ -232,7 +232,7 @@ export default function PriceTracker({ productId, productName, currentPrice }) {
       {
         label: 'Predicted Price',
         data: [...Array(filteredHistory.length).fill(null), ...predictions.map(item => item.price)],
-        borderColor: 'rgba(155, 89, 182, 1)',
+        borderColor: 'rgba(20, 33, 61, 1)',
         borderDashed: [5, 5],
         borderWidth: 2,
         pointRadius: 0,
@@ -377,14 +377,14 @@ export default function PriceTracker({ productId, productName, currentPrice }) {
           <div className="space-y-3">
             <div className="flex justify-between items-center">
               <span className="text-gray-600">30-Day Change:</span>
-              <span className={`font-semibold flex items-center ${insights.thirtyDayChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+              <span className={`font-semibold flex items-center ${insights.thirtyDayChange >= 0 ? 'text-primary-dark' : 'text-secondary'}`}>
                 {insights.thirtyDayChange >= 0 ? <FaArrowUp className="mr-1" /> : <FaArrowDown className="mr-1" />}
                 {Math.abs(insights.thirtyDayChange).toFixed(2)}%
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-gray-600">7-Day Change:</span>
-              <span className={`font-semibold flex items-center ${insights.sevenDayChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+              <span className={`font-semibold flex items-center ${insights.sevenDayChange >= 0 ? 'text-primary-dark' : 'text-secondary'}`}>
                 {insights.sevenDayChange >= 0 ? <FaArrowUp className="mr-1" /> : <FaArrowDown className="mr-1" />}
                 {Math.abs(insights.sevenDayChange).toFixed(2)}%
               </span>
@@ -406,7 +406,7 @@ export default function PriceTracker({ productId, productName, currentPrice }) {
           <div className="space-y-3">
             <div className="flex justify-between items-center">
               <span className="text-gray-600">30-Day Forecast:</span>
-              <span className={`font-semibold flex items-center ${insights.predictedChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+              <span className={`font-semibold flex items-center ${insights.predictedChange >= 0 ? 'text-primary-dark' : 'text-secondary'}`}>
                 {insights.predictedChange >= 0 ? <FaArrowUp className="mr-1" /> : <FaArrowDown className="mr-1" />}
                 {Math.abs(insights.predictedChange).toFixed(2)}%
               </span>

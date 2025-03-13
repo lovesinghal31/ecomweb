@@ -96,15 +96,15 @@ const ProductReview = ({ review, isCompact = false, onViewFullReviews }) => {
                 <div 
                   key={index} 
                   className={`flex items-start p-2 rounded ${
-                    point.type === 'positive' ? 'bg-green-50' : 'bg-red-50'
+                    point.type === 'positive' ? 'bg-primary/10' : 'bg-secondary/10'
                   }`}
                 >
                   <span 
                     className={`inline-block w-2 h-2 rounded-full mt-1.5 mr-2 ${
-                      point.type === 'positive' ? 'bg-green-500' : 'bg-red-500'
+                      point.type === 'positive' ? 'bg-primary' : 'bg-secondary'
                     }`}
                   ></span>
-                  <span className={point.type === 'positive' ? 'text-green-800' : 'text-red-800'}>
+                  <span className={point.type === 'positive' ? 'text-primary-dark' : 'text-secondary'}>
                     {point.text}
                   </span>
                 </div>

@@ -82,7 +82,7 @@ export default function ProductCard({ product }) {
                 className="text-primary hover:text-primary-dark flex items-center"
                 title="Show AI-summarized reviews"
               >
-                <FaStar className="text-yellow-500 mr-1" size={14} />
+                <FaStar className="text-primary mr-1" size={14} />
                 <span className="font-medium text-sm">{review.averageRating}</span>
                 <FaInfoCircle className="ml-1" size={12} />
               </button>

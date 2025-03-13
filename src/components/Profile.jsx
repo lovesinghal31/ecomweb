@@ -337,16 +337,16 @@ export default function Profile() {
                           <div className="flex items-center">
                             {method.type === 'Credit Card' && (
                               <div className="w-12 h-8 mr-3 flex items-center justify-center">
-                                {method.brand === 'visa' && <FaCcVisa className="text-blue-700 text-3xl" />}
-                                {method.brand === 'mastercard' && <FaCcMastercard className="text-red-600 text-3xl" />}
-                                {method.brand === 'amex' && <FaCcAmex className="text-blue-500 text-3xl" />}
+                                {method.brand === 'visa' && <FaCcVisa className="text-secondary text-3xl" />}
+                                {method.brand === 'mastercard' && <FaCcMastercard className="text-primary text-3xl" />}
+                                {method.brand === 'amex' && <FaCcAmex className="text-secondary-light text-3xl" />}
                                 {!['visa', 'mastercard', 'amex'].includes(method.brand) && <FaCreditCard className="text-gray-600 text-3xl" />}
                               </div>
                             )}
                             {method.type === 'UPI' && (
                               <div className="w-12 h-8 mr-3 flex items-center justify-center">
                                 {method.brand === 'googlepay' && <FaGooglePay className="text-gray-700 text-3xl" />}
-                                {method.brand === 'paypal' && <FaPaypal className="text-blue-600 text-3xl" />}
+                                {method.brand === 'paypal' && <FaPaypal className="text-secondary text-3xl" />}
                                 {!['googlepay', 'paypal'].includes(method.brand) && <FaCreditCard className="text-gray-600 text-3xl" />}
                               </div>
                             )}
