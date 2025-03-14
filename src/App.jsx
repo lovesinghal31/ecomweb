@@ -7,6 +7,8 @@ import Cart from './components/Cart';
 import Footer from './components/Footer';
 import Profile from './components/Profile';
 import ProductDetail from './components/ProductDetail';
+import AIChatbot from './components/AIChatbot';
+import FAQ from './components/FAQ';
 import { ReviewProvider } from './context/ReviewContext';
 import { WishlistProvider } from './context/WishlistContext';
 
@@ -261,9 +263,9 @@ function App() {
                             <div className="ml-4">
                               <h4 className="text-lg font-medium text-gray-800">Address</h4>
                               <p className="mt-1 text-gray-600">
-                                ShopEasy Headquarters<br />
-                                123 E-Commerce Way<br />
-                                Bangalore, Karnataka 560001<br />
+                                C-12 Satguru Boys Hostel<br />
+                                Khandwa Naka<br />
+                                Indore, MP 452001<br />
                                 India
                               </p>
                             </div>
@@ -348,32 +350,17 @@ function App() {
                     </div>
                     
                     {/* FAQ Section */}
-                    <div className="mt-16">
-                      <h3 className="text-2xl font-semibold mb-6 text-gray-800">Frequently Asked Questions</h3>
-                      <div className="space-y-4">
-                        <div className="bg-white p-6 rounded-lg shadow-md">
-                          <h4 className="text-lg font-medium text-gray-800 mb-2">How can I track my order?</h4>
-                          <p className="text-gray-600">You can track your order by logging into your account and visiting the "My Orders" section. Alternatively, you can use the tracking number provided in your shipping confirmation email.</p>
-                        </div>
-                        <div className="bg-white p-6 rounded-lg shadow-md">
-                          <h4 className="text-lg font-medium text-gray-800 mb-2">What is your return policy?</h4>
-                          <p className="text-gray-600">We offer a 30-day return policy for most items. Products must be in their original condition with all tags and packaging intact. Please visit our Returns page for more details.</p>
-                        </div>
-                        <div className="bg-white p-6 rounded-lg shadow-md">
-                          <h4 className="text-lg font-medium text-gray-800 mb-2">How long does shipping take?</h4>
-                          <p className="text-gray-600">Standard shipping typically takes 3-5 business days within India. Express shipping options are available at checkout for faster delivery.</p>
-                        </div>
-                      </div>
-                    </div>
+                    <FAQ />
                   </div>
                 } />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/product/:productId" element={<ProductDetail />} />
               </Routes>
             </main>
-            <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
             <Footer />
+            <AIChatbot />
           </div>
+          {isCartOpen && <Cart onClose={() => setIsCartOpen(false)} />}
         </Router>
       </WishlistProvider>
     </ReviewProvider>
