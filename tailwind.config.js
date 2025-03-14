@@ -27,7 +27,8 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['"Inter"', 'sans-serif'],
+        sans: ['"Quantico"', 'sans-serif'],
+        heading: ['"Quantico"', 'sans-serif'],
       },
       animation: {
         kenburns: 'kenburns 30s ease-in-out infinite alternate',
