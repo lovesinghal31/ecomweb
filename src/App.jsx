@@ -143,7 +143,7 @@ function App() {
                       <div className='bg-gray-100 rounded-lg p-8'>
                         <h3 className="text-2xl font-semibold mb-4 text-gray-800">Our Story</h3>
                         <p className="text-lg text-gray-700 mb-4">
-                          Founded in 2018, ShopEasy began with a simple mission: to make online shopping truly easy and enjoyable for everyone. What started as a small startup with just 5 team members has now grown into a trusted e-commerce platform serving thousands of customers nationwide.
+                          Founded in 2025, ShopEasy began with a simple mission: to make online shopping truly easy and enjoyable for everyone.
                         </p>
                         <p className="text-lg text-gray-700">
                           Our journey has been driven by our passion for connecting people with high-quality products at competitive prices, while providing an exceptional shopping experience from browse to delivery.
