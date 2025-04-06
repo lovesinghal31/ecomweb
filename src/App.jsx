@@ -360,7 +360,7 @@ function App() {
             <Footer />
             <AIChatbot />
           </div>
-          {isCartOpen && <Cart onClose={() => setIsCartOpen(false)} />}
+          <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
         </Router>
       </WishlistProvider>
     </ReviewProvider>

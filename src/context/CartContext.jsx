@@ -8,7 +8,20 @@ const initialState = {
   totalAmount: 0,
 };
 
+// Load cart from localStorage if available
+const loadCartFromStorage = () => {
+  try {
+    const storedCart = localStorage.getItem('cart');
+    return storedCart ? JSON.parse(storedCart) : initialState;
+  } catch (error) {
+    console.error('Error loading cart from localStorage:', error);
+    return initialState;
+  }
+};
+
 function cartReducer(state, action) {
+  let updatedState;
+  
   switch (action.type) {
     case 'ADD_ITEM': {
       const existingItemIndex = state.items.findIndex(
@@ -28,12 +41,13 @@ function cartReducer(state, action) {
         updatedItems = [...state.items, { ...action.payload, quantity: 1 }];
       }
 
-      return {
+      updatedState = {
         ...state,
         items: updatedItems,
         totalItems: updatedItems.reduce((total, item) => total + item.quantity, 0),
         totalAmount: updatedItems.reduce((total, item) => total + item.price * item.quantity, 0),
       };
+      break;
     }
 
     case 'REMOVE_ITEM': {
@@ -56,23 +70,25 @@ function cartReducer(state, action) {
         });
       }
 
-      return {
+      updatedState = {
         ...state,
         items: updatedItems,
         totalItems: updatedItems.reduce((total, item) => total + item.quantity, 0),
         totalAmount: updatedItems.reduce((total, item) => total + item.price * item.quantity, 0),
       };
+      break;
     }
 
     case 'DELETE_ITEM': {
       const updatedItems = state.items.filter(item => item.id !== action.payload.id);
 
-      return {
+      updatedState = {
         ...state,
         items: updatedItems,
         totalItems: updatedItems.reduce((total, item) => total + item.quantity, 0),
         totalAmount: updatedItems.reduce((total, item) => total + item.price * item.quantity, 0),
       };
+      break;
     }
 
     case 'UPDATE_QUANTITY': {
@@ -87,30 +103,33 @@ function cartReducer(state, action) {
         return item;
       });
 
-      return {
+      updatedState = {
         ...state,
         items: updatedItems,
         totalItems: updatedItems.reduce((total, item) => total + item.quantity, 0),
         totalAmount: updatedItems.reduce((total, item) => total + item.price * item.quantity, 0),
       };
+      break;
     }
 
     case 'CLEAR_CART': {
-      return {
-        ...state,
-        items: [],
-        totalItems: 0,
-        totalAmount: 0,
+      updatedState = {
+        ...initialState
       };
+      break;
     }
 
     default:
       return state;
   }
+  
+  // Save updated cart to localStorage
+  localStorage.setItem('cart', JSON.stringify(updatedState));
+  return updatedState;
 }
 
 export function CartProvider({ children }) {
-  const [state, dispatch] = useReducer(cartReducer, initialState);
+  const [state, dispatch] = useReducer(cartReducer, initialState, loadCartFromStorage);
 
   const addItem = (product) => {
     dispatch({ type: 'ADD_ITEM', payload: product });
