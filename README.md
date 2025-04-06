@@ -80,4 +80,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Love Singhal - [Github](https://github.com/lovesinghal31)
 
-Project Link: [https://github.com/yourusername/ecomweb](https://github.com/lovesinghal31/ecomweb)
+Project Link: [https://github.com/lovesinghal31/ecomweb](https://github.com/lovesinghal31/ecomweb)
